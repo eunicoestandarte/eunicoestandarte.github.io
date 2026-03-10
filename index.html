@@ -4,46 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EUNICO ESTANDARTE | Cybersecurity Portfolio</title>
-    
-    <script>
-        function checkPassword() {
-            // Ang password mo (Unit1870Eunix!@Details) ay naka-Base64 format dito para hindi cleartext sa source code.
-            var password = prompt("ENTER ACCESS KEY:");
-            if (btoa(password) !== "VW5pdDE4NzBFdW5peCFARGV0YWlscw==") { 
-                alert("ACCESS DENIED.");
-                document.body.innerHTML = '<div style="background:#060608; color:#ff4444; height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; font-family: \'Fira Code\', monospace;"><h1>403 - UNAUTHORIZED ACCESS</h1><p style="color:#94a3b8; margin-top:1rem;">Invalid credentials. Please contact the administrator for access.</p></div>';
-                document.body.style.display = "block";
-            } else {
-                document.body.style.display = "flex";
-            }
-        }
-    </script>
-
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;500&family=Inter:wght@300;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #060608;
             --accent: #00f2ff;
-            --accent-dim: rgba(0, 242, 255, 0.1);
+            --accent-dim: rgba(0, 242, 255, 0.15);
             --text-main: #e2e8f0;
             --text-dim: #94a3b8;
             --card-bg: rgba(10, 10, 15, 0.9);
-            --border: rgba(0, 242, 255, 0.15);
+            --border: rgba(0, 242, 255, 0.2);
             --terminal-green: #00ff41;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-
+        /* Itinatago ang body para sa password protection */
         body {
+            display: none; 
             background-color: var(--bg);
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
-            display: flex; /* Script will toggle display from 'none' to 'flex' */
+            margin: 0;
         }
 
-        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.3; }
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
 
+        /* --- Network Background (Mas Visible na ng onti) --- */
+        #bg-canvas { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            z-index: -1; 
+            opacity: 0.5; /* Increased from 0.3 to 0.5 */
+        }
+
+        /* --- Sidebar Navigation --- */
         nav {
             width: 80px;
             height: 100vh;
@@ -53,7 +48,7 @@
             flex-direction: column;
             align-items: center;
             padding: 2rem 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.7);
             backdrop-filter: blur(10px);
             z-index: 100;
         }
@@ -73,7 +68,8 @@
 
         .nav-item:hover { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
 
-        main { margin-left: 80px; width: 100%; max-width: 1200px; padding: 0 4rem; }
+        /* --- Main Content --- */
+        main { margin-left: 80px; width: calc(100% - 80px); max-width: 1200px; padding: 0 4rem; }
 
         header {
             height: 100vh;
@@ -86,6 +82,7 @@
         .hero-name { font-size: 5rem; font-weight: 800; line-height: 0.9; margin: 1rem 0; letter-spacing: -2px; }
         .hero-role { font-family: 'Fira Code', monospace; font-size: 1.2rem; color: var(--text-dim); }
 
+        /* --- Section Styling --- */
         section { padding: 8rem 0; }
         .section-title {
             font-family: 'Fira Code', monospace;
@@ -98,6 +95,7 @@
         }
         .section-title::after { content: ""; height: 1px; flex: 1; background: var(--border); }
 
+        /* --- Certifications Grid --- */
         .certs-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
         .cert-card {
             background: var(--card-bg);
@@ -112,6 +110,7 @@
         .cert-card.active { border-left: 3px solid var(--accent); background: var(--accent-dim); }
         .cert-card.expired { opacity: 0.5; border-left: 3px solid #ff4444; }
 
+        /* --- Projects Grid --- */
         .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem; }
         .project-card {
             background: var(--card-bg);
@@ -127,6 +126,7 @@
         .project-card ul { list-style: none; font-size: 0.8rem; color: var(--text-dim); }
         .project-card li::before { content: "> "; color: var(--accent); }
 
+        /* --- Experience Timeline --- */
         .timeline { position: relative; border-left: 1px solid var(--border); padding-left: 2rem; }
         .timeline-item { margin-bottom: 4rem; position: relative; }
         .timeline-item::before { 
@@ -140,6 +140,7 @@
         .time-desc { font-size: 0.9rem; color: var(--text-dim); max-width: 800px; }
         .time-desc li { margin-bottom: 0.5rem; list-style: square; margin-left: 1.2rem; }
 
+        /* --- Footer --- */
         footer { padding: 4rem 0; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 0.8rem; font-family: 'Fira Code', monospace; }
         .contact-grid { display: flex; gap: 2rem; margin-top: 2rem; }
         .contact-link { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; }
@@ -152,8 +153,7 @@
         }
     </style>
 </head>
-
-<body style="display: none;" onload="checkPassword()">
+<body onload="checkPassword()">
 
     <canvas id="bg-canvas"></canvas>
 
@@ -166,6 +166,7 @@
     </nav>
 
     <main>
+        <!-- HERO -->
         <header id="home">
             <span class="hero-pre">SYSTEM_ACCESS: GRANTED</span>
             <h1 class="hero-name">EUNICO TERRY<br>ESTANDARTE</h1>
@@ -176,6 +177,7 @@
             </p>
         </header>
 
+        <!-- CERTIFICATIONS -->
         <section id="certs">
             <h2 class="section-title">CERTIFICATIONS</h2>
             <div class="certs-container">
@@ -194,9 +196,11 @@
             </div>
         </section>
 
+        <!-- PROJECTS -->
         <section id="projects">
             <h2 class="section-title">TECHNICAL_PROJECTS</h2>
             <div class="projects-grid">
+                <!-- Project 1 -->
                 <div class="project-card">
                     <span class="project-tag">#Virtualization #Security</span>
                     <h3>Linux VM Expansion & Isolation</h3>
@@ -208,6 +212,7 @@
                     </ul>
                 </div>
 
+                <!-- Project 2 -->
                 <div class="project-card">
                     <span class="project-tag">#ZeroTrust #Access</span>
                     <h3>Cloudflare Browser RDP</h3>
@@ -218,6 +223,7 @@
                     </ul>
                 </div>
 
+                <!-- Project 3 -->
                 <div class="project-card">
                     <span class="project-tag">#Infrastructure #Firewall</span>
                     <h3>On-Prem & DR Topology Redesign</h3>
@@ -228,6 +234,7 @@
                     </ul>
                 </div>
 
+                <!-- Project 4 -->
                 <div class="project-card">
                     <span class="project-tag">#VAPT #Pentesting</span>
                     <h3>1 Pentagon Network VAPT</h3>
@@ -238,6 +245,7 @@
                     </ul>
                 </div>
 
+                <!-- Project 5 -->
                 <div class="project-card">
                     <span class="project-tag">#WebSecurity #OWASP</span>
                     <h3>1 Pentagon Web VAPT</h3>
@@ -248,6 +256,7 @@
                     </ul>
                 </div>
 
+                <!-- Project 6 -->
                 <div class="project-card">
                     <span class="project-tag">#API #IIS</span>
                     <h3>QNE API Server Deployment</h3>
@@ -258,6 +267,7 @@
                     </ul>
                 </div>
 
+                <!-- Project 7 -->
                 <div class="project-card">
                     <span class="project-tag">#Monitoring #Linux</span>
                     <h3>Linux Monitoring (Netdata)</h3>
@@ -268,6 +278,7 @@
                     </ul>
                 </div>
 
+                <!-- Project 8 -->
                 <div class="project-card">
                     <span class="project-tag">#SecurityTraining</span>
                     <h3>Cyber Awareness Seminar</h3>
@@ -280,9 +291,11 @@
             </div>
         </section>
 
+        <!-- EXPERIENCE -->
         <section id="experience">
             <h2 class="section-title">WORK_HISTORY</h2>
             <div class="timeline">
+                
                 <div class="timeline-item">
                     <span class="time-date">MARCH 2022 — PRESENT</span>
                     <h3 class="time-company">Investagrams Inc., Makati City</h3>
@@ -291,3 +304,178 @@
                         <li>Monitors network, server, and endpoint health using Netdata and centralized logging.</li>
                         <li>Conducts regular vulnerability scanning and exposure assessments.</li>
                         <li>Maintains secure remote access tunnels and Zero Trust controls.</li>
+                        <li>Manages pfSense firewall rulesets, NAT policies, and security logs.</li>
+                        <li>Secondary: Assists in GRC policy drafting and TPSA compliance assessments.</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <span class="time-date">JULY 2025 — DEC 2025</span>
+                    <h3 class="time-company">NDA / Confidential</h3>
+                    <p class="time-role">OSINT Specialist (Part-time Hybrid)</p>
+                    <ul class="time-desc">
+                        <li>Performed digital footprint analysis using ethical OSINT methods.</li>
+                        <li>Correlated online intel with internal records to flag fraud indicators.</li>
+                        <li>Produced risk profiling reports to support collections.</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <span class="time-date">FEB 2024 — JULY 2025</span>
+                    <h3 class="time-company">1-Pentagon Credit & Lending Corp.</h3>
+                    <p class="time-role">Cybersecurity Analyst (Part-time Hybrid)</p>
+                    <ul class="time-desc">
+                        <li>Performed in-depth Network and Web Application VAPT.</li>
+                        <li>Maintained high availability and security across organization infrastructure.</li>
+                        <li>Recommended remediation strategies for misconfigurations and outdated services.</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <span class="time-date">JAN 2017 — FEB 2022</span>
+                    <h3 class="time-company">ASLCU POS Equipment</h3>
+                    <p class="time-role">Network Engineer (Part-time Hybrid)</p>
+                    <ul class="time-desc">
+                        <li>Managed POS network infrastructure for mall-based sales setups.</li>
+                        <li>Troubleshot networking issues and performed preventive maintenance.</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <span class="time-date">FEB 2019 — NOV 2019</span>
+                    <h3 class="time-company">Specified Contractors & Development Inc.</h3>
+                    <p class="time-role">IT Officer (Full-time)</p>
+                    <ul class="time-desc">
+                        <li>Handled end-to-end IT operations: Hardware, Software, and Network setup.</li>
+                        <li>Maintained CCTV systems and basic security controls.</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <span class="time-date">AUG 2017 — AUG 2018</span>
+                    <h3 class="time-company">Happy Lemon Group Philippines</h3>
+                    <p class="time-role">IT Officer (Full-time)</p>
+                    <ul class="time-desc">
+                        <li>Supported POS software, biometric systems, and CCTV.</li>
+                        <li>Managed store-wide network cabling and hardware maintenance.</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <span class="time-date">NOV 2015 — MAY 2016</span>
+                    <h3 class="time-company">United Laboratories (Unilab)</h3>
+                    <p class="time-role">Web Project Coordinator / QA (Contract)</p>
+                    <ul class="time-desc">
+                        <li>Validated application updates and reported usability bugs.</li>
+                        <li>Managed doctor account access and platform troubleshooting.</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <span class="time-date">NOV 2014 — APRIL 2015</span>
+                    <h3 class="time-company">Camp Crame, Quezon City</h3>
+                    <p class="time-role">IT Intern</p>
+                    <ul class="time-desc">
+                        <li>Assisted in structured cabling and basic network troubleshooting.</li>
+                        <li>Formatted hardware and provided day-to-day staff support.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <footer id="contact">
+            <h2 class="section-title">TERMINAL_EXIT</h2>
+            <div class="contact-grid">
+                <div>
+                    <p>EMAIL</p>
+                    <a href="mailto:eunico.estandarte@gmail.com" class="contact-link">eunico.estandarte@gmail.com</a>
+                </div>
+                <div>
+                    <p>PHONE/VIBER</p>
+                    <span class="contact-link">09266331931</span>
+                </div>
+                <div>
+                    <p>LOCATION</p>
+                    <span class="contact-link">Antipolo City, PH</span>
+                </div>
+            </div>
+            <div style="margin-top: 4rem; opacity: 0.5;">
+                <p>Linkedin Profile: https://www.linkedin.com/in/eunico-e-00b354100/</p>
+                <p>Built with Cyber-Minimalist Protocol v2.0</p>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        // Password Protection Function
+        function checkPassword() {
+            var password = prompt("ENTER ACCESS KEY:");
+            if (btoa(password) !== "VW5pdDE4NzBFdW5peCFARGV0YWlscw==") { 
+                alert("ACCESS DENIED.");
+                document.body.innerHTML = '<div style="background:#060608; color:red; height:100vh; display:flex; align-items:center; justify-content:center; font-family:monospace; font-size: 2rem;">403 - UNAUTHORIZED ACCESS</div>';
+                document.body.style.display = "block";
+            } else {
+                document.body.style.display = "flex";
+                animate(); // Start animation only after access
+            }
+        }
+
+        // --- Network Background Animation ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = (Math.random() - 0.5) * 0.4;
+            }
+            update() {
+                this.x += this.vx; this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+        }
+
+        for(let i=0; i<100; i++) particles.push(new Particle());
+
+        function animate() {
+            ctx.clearRect(0,0,canvas.width, canvas.height);
+            ctx.fillStyle = "#00f2ff";
+            ctx.strokeStyle = "rgba(0, 242, 255, 0.2)"; // Mas matingkad na stroke (0.2)
+            
+            particles.forEach((p, i) => {
+                p.update();
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 1.5, 0, Math.PI*2); // Malaki ng konti ang dots (1.5)
+                ctx.fill();
+
+                for(let j=i+1; j<particles.length; j++) {
+                    let p2 = particles[j];
+                    let d = Math.hypot(p.x-p2.x, p.y-p2.y);
+                    if(d < 150) { // Mas mahabang lines para mas visible
+                        ctx.beginPath();
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animate);
+        }
+    </script>
+</body>
+</html>
