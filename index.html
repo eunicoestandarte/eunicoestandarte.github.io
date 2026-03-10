@@ -1,6 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+<script>
+    function checkPassword() {
+        var password = prompt("ENTER ACCESS KEY:");
+        if (password !== "Unit1870Eunix!@Details") { // Palitan mo ito ng gusto mong password
+            alert("ACCESS DENIED.");
+            document.body.innerHTML = '<h1 style="color:red; text-align:center; margin-top:20%;">403 - UNAUTHORIZED ACCESS</h1>';
+        } else {
+            document.body.style.display = "block";
+        }
+    }
+</script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EUNICO ESTANDARTE | Cybersecurity Portfolio</title>
@@ -457,4 +470,5 @@
         animate();
     </script>
 </body>
+
 </html>
