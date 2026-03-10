@@ -3,473 +3,497 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EUNICO ESTANDARTE | Cybersecurity Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;500&family=Inter:wght@300;600;800&display=swap" rel="stylesheet">
+    <title>EUNICO TERRY ESTANDARTE | Cybersecurity Specialist</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;500&family=Orbitron:wght@400;900&family=Inter:wght@300;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #060608;
+            --bg: #020204;
             --accent: #00f2ff;
-            --accent-dim: rgba(0, 242, 255, 0.15);
+            --terminal-green: #00ff41;
             --text-main: #e2e8f0;
             --text-dim: #94a3b8;
-            --card-bg: rgba(10, 10, 15, 0.9);
-            --border: rgba(0, 242, 255, 0.2);
-            --terminal-green: #00ff41;
-        }
-
-        /* Itinatago ang body para sa password protection */
-        body {
-            display: none; 
-            background-color: var(--bg);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            margin: 0;
+            --border: rgba(0, 242, 255, 0.3);
+            --card-bg: rgba(5, 10, 20, 0.85);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
 
-        /* --- Network Background (Mas Visible na ng onti) --- */
-        #bg-canvas { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            z-index: -1; 
-            opacity: 0.5; /* Increased from 0.3 to 0.5 */
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
         }
 
-        /* --- Sidebar Navigation --- */
+        /* --- Scanline Effect --- */
+        body::before {
+            content: " "; display: block; position: fixed; inset: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 9999; background-size: 100% 3px, 3px 100%; pointer-events: none;
+        }
+
+        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+
+        /* --- Terminal Login Overlay --- */
+        #login-overlay {
+            position: fixed; inset: 0; background: var(--bg); z-index: 10000;
+            display: flex; justify-content: center; align-items: center; font-family: 'Fira Code', monospace;
+        }
+
+        .terminal-box {
+            width: 90%; max-width: 550px; padding: 2.5rem; border: 1px solid var(--accent);
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.2); background: rgba(0, 0, 0, 0.95);
+        }
+
+        #password-input {
+            background: transparent; border: none; color: var(--accent);
+            font-family: 'Fira Code', monospace; font-size: 1.2rem; outline: none;
+            width: 100%; margin-top: 1.5rem; border-bottom: 1px solid var(--border);
+        }
+
+        /* --- Main Content Layout --- */
+        #content { display: none; } 
+
         nav {
-            width: 80px;
-            height: 100vh;
-            position: fixed;
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 2rem 0;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(10px);
-            z-index: 100;
+            width: 80px; height: 100vh; position: fixed; border-right: 1px solid var(--border);
+            display: flex; flex-direction: column; align-items: center; padding: 2rem 0;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 100;
         }
 
         .nav-item {
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            transform: rotate(180deg);
-            margin: 1.5rem 0;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            color: var(--text-dim);
-            text-decoration: none;
-            transition: 0.3s;
+            writing-mode: vertical-rl; transform: rotate(180deg); margin: 1.5rem 0;
+            font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-dim);
+            text-decoration: none; transition: 0.3s; letter-spacing: 2px;
         }
-
         .nav-item:hover { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
 
-        /* --- Main Content --- */
-        main { margin-left: 80px; width: calc(100% - 80px); max-width: 1200px; padding: 0 4rem; }
+        main { margin-left: 80px; padding: 0 5%; width: calc(100% - 80px); }
 
-        header {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+        /* --- Glitch Name --- */
+        header { height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+        .glitch-name {
+            font-family: 'Orbitron', sans-serif; font-size: clamp(2.5rem, 7vw, 5.5rem);
+            font-weight: 900; text-transform: uppercase; color: #fff;
+            line-height: 0.9; animation: glitch 1s infinite;
         }
 
-        .hero-pre { font-family: 'Fira Code', monospace; color: var(--accent); font-size: 0.9rem; }
-        .hero-name { font-size: 5rem; font-weight: 800; line-height: 0.9; margin: 1rem 0; letter-spacing: -2px; }
-        .hero-role { font-family: 'Fira Code', monospace; font-size: 1.2rem; color: var(--text-dim); }
+        @keyframes glitch {
+            0% { text-shadow: 2px 0 0 #ff00c1, -2px 0 0 #00fff9; }
+            25% { text-shadow: -2px 0 0 #ff00c1, 2px 0 0 #00fff9; }
+            50% { text-shadow: 2px -2px 0 #ff00c1, -2px 2px 0 #00fff9; }
+            100% { text-shadow: 2px 0 0 #ff00c1, -2px 0 0 #00fff9; }
+        }
 
         /* --- Section Styling --- */
-        section { padding: 8rem 0; }
+        section { padding: 6rem 0; }
         .section-title {
-            font-family: 'Fira Code', monospace;
-            font-size: 1.5rem;
-            margin-bottom: 3rem;
-            color: var(--accent);
-            display: flex;
-            align-items: center;
-            gap: 1rem;
+            font-family: 'Orbitron', sans-serif; font-size: 1.8rem; color: var(--accent);
+            margin-bottom: 3rem; display: flex; align-items: center; gap: 1rem;
         }
         .section-title::after { content: ""; height: 1px; flex: 1; background: var(--border); }
 
-        /* --- Certifications Grid --- */
-        .certs-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+        /* --- Certifications (UPDATED SIZE) --- */
+        .certs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.2rem; }
         .cert-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            padding: 1rem;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.75rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background: var(--card-bg); border: 1px solid var(--border);
+            padding: 1.5rem; font-family: 'Fira Code', monospace; transition: 0.3s;
         }
-        .cert-card.active { border-left: 3px solid var(--accent); background: var(--accent-dim); }
-        .cert-card.expired { opacity: 0.5; border-left: 3px solid #ff4444; }
+        .cert-card:hover { border-color: var(--accent); background: rgba(0, 242, 255, 0.05); }
+        .cert-card h4 { font-size: 1.1rem; color: var(--accent); margin-bottom: 5px; }
+        .cert-card span { font-size: 0.8rem; color: var(--terminal-green); }
+        .cert-card.expired { border-left: 4px solid #ff4444; opacity: 0.7; }
 
-        /* --- Projects Grid --- */
-        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem; }
+        /* --- Projects --- */
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 2rem; }
         .project-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            padding: 2rem;
-            position: relative;
-            transition: 0.3s;
+            background: var(--card-bg); border: 1px solid var(--border); padding: 2rem;
+            position: relative; transition: 0.4s; backdrop-filter: blur(5px);
         }
-        .project-card:hover { border-color: var(--accent); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,242,255,0.1); }
-        .project-tag { font-family: 'Fira Code', monospace; font-size: 0.6rem; color: var(--accent); text-transform: uppercase; margin-bottom: 0.5rem; display: block; }
-        .project-card h3 { margin-bottom: 1rem; font-size: 1.1rem; }
-        .project-card p { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 1rem; }
-        .project-card ul { list-style: none; font-size: 0.8rem; color: var(--text-dim); }
-        .project-card li::before { content: "> "; color: var(--accent); }
+        .project-card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 10px 30px rgba(0,242,255,0.1); }
+        .project-year { font-family: 'Fira Code'; color: var(--accent); font-size: 0.8rem; }
+        .project-card h3 { margin: 10px 0; font-family: 'Orbitron'; font-size: 1.1rem; }
+        .project-card p { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 1rem; line-height: 1.5; }
+        .project-card li { list-style: none; font-size: 0.8rem; color: var(--terminal-green); margin-bottom: 5px; }
+        .project-card li::before { content: "> "; }
 
-        /* --- Experience Timeline --- */
-        .timeline { position: relative; border-left: 1px solid var(--border); padding-left: 2rem; }
+        /* --- Experience --- */
+        .timeline { border-left: 1px solid var(--border); padding-left: 2.5rem; }
         .timeline-item { margin-bottom: 4rem; position: relative; }
-        .timeline-item::before { 
-            content: ""; position: absolute; left: calc(-2rem - 5px); top: 5px; 
-            width: 10px; height: 10px; background: var(--accent); border-radius: 50%;
-            box-shadow: 0 0 10px var(--accent);
+        .timeline-item::before {
+            content: ""; position: absolute; left: calc(-2.5rem - 7px); top: 5px;
+            width: 14px; height: 14px; background: var(--accent); border-radius: 50%;
+            box-shadow: 0 0 15px var(--accent);
         }
-        .time-date { font-family: 'Fira Code', monospace; font-size: 0.8rem; color: var(--accent); }
-        .time-company { font-size: 1.2rem; font-weight: 600; margin: 0.5rem 0; }
-        .time-role { font-family: 'Fira Code', monospace; font-size: 0.9rem; color: var(--terminal-green); margin-bottom: 1rem; }
-        .time-desc { font-size: 0.9rem; color: var(--text-dim); max-width: 800px; }
-        .time-desc li { margin-bottom: 0.5rem; list-style: square; margin-left: 1.2rem; }
+        .time-date { font-family: 'Fira Code'; color: var(--accent); font-weight: bold; }
+        .time-company { font-size: 1.4rem; font-weight: 800; margin: 5px 0; font-family: 'Orbitron'; }
+        .time-role { color: var(--terminal-green); font-family: 'Fira Code'; margin-bottom: 1rem; }
+        .time-desc { font-size: 0.95rem; color: var(--text-dim); line-height: 1.6; list-style: square; margin-left: 1.2rem; }
 
-        /* --- Footer --- */
-        footer { padding: 4rem 0; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 0.8rem; font-family: 'Fira Code', monospace; }
-        .contact-grid { display: flex; gap: 2rem; margin-top: 2rem; }
-        .contact-link { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; }
-        .contact-link:hover { border-color: var(--accent); }
+        footer { padding: 5rem 0; border-top: 1px solid var(--border); text-align: center; }
+        .contact-link { color: var(--accent); text-decoration: none; font-family: 'Fira Code'; margin: 0 20px; font-size: 1rem; }
+        .contact-link:hover { text-shadow: 0 0 10px var(--accent); }
 
         @media (max-width: 768px) {
             nav { display: none; }
             main { margin-left: 0; padding: 0 1.5rem; }
-            .hero-name { font-size: 3rem; }
         }
     </style>
 </head>
-<body onload="checkPassword()">
+<body>
 
-    <canvas id="bg-canvas"></canvas>
-
-    <nav>
-        <a href="#home" class="nav-item">00_ROOT</a>
-        <a href="#certs" class="nav-item">01_CERTIFICATIONS</a>
-        <a href="#projects" class="nav-item">02_DEPLOYMENTS</a>
-        <a href="#experience" class="nav-item">03_HISTORY</a>
-        <a href="#contact" class="nav-item">04_CONNECT</a>
-    </nav>
-
-    <main>
-        <!-- HERO -->
-        <header id="home">
-            <span class="hero-pre">SYSTEM_ACCESS: GRANTED</span>
-            <h1 class="hero-name">EUNICO TERRY<br>ESTANDARTE</h1>
-            <p class="hero-role">Cybersecurity & System Administrator / Infrastructure Specialist</p>
-            <p style="max-width: 600px; margin-top: 2rem; color: var(--text-dim);">
-                Strengthening digital perimeters through advanced penetration testing, 
-                network orchestration, and proactive vulnerability management. 
-            </p>
-        </header>
-
-        <!-- CERTIFICATIONS -->
-        <section id="certs">
-            <h2 class="section-title">CERTIFICATIONS</h2>
-            <div class="certs-container">
-                <div class="cert-card active"><span>CCNA</span><span>[ENROLLED]</span></div>
-                <div class="cert-card active"><span>Practical OSINT Prof.</span><span>[ENROLLED]</span></div>
-                <div class="cert-card active"><span>Practical Web Pentest Assoc. (PWPA)</span></div>
-                <div class="cert-card active"><span>Offensive Security w/ AI (OSAI)</span></div>
-                <div class="cert-card active"><span>API Security Fundamentals</span></div>
-                <div class="cert-card"><span>Phishing Prevention Specialist</span></div>
-                <div class="cert-card"><span>SME Cyber Security Officer</span></div>
-                <div class="cert-card"><span>Intro to Critical Infra Protection</span></div>
-                <div class="cert-card"><span>Ethical Hacking Boot Camp</span></div>
-                <div class="cert-card"><span>Intl Cyber Threat Task Force</span></div>
-                <div class="cert-card"><span>Governance Risk & Compliance (CGRCA)</span></div>
-                <div class="cert-card expired"><span>CompTIA Security+</span><span>[EXPIRED]</span></div>
+    <!-- Terminal Login -->
+    <div id="login-overlay">
+        <div class="terminal-box">
+            <div id="terminal-output" style="color: var(--terminal-green); font-size: 0.9rem;">
+                > SYSTEM_INITIALIZED...<br>
+                > LOADING_ENCRYPTION_MODULES...<br>
+                > ACCESS_RESTRICTED: E. ESTANDARTE PRIVATE_FILES<br><br>
+                > ENTER ACCESS KEY:
             </div>
-        </section>
+            <input type="password" id="password-input" autofocus autocomplete="off">
+            <div id="login-status" style="margin-top: 15px; font-size: 0.8rem;"></div>
+        </div>
+    </div>
 
-        <!-- PROJECTS -->
-        <section id="projects">
-            <h2 class="section-title">TECHNICAL_PROJECTS</h2>
-            <div class="projects-grid">
-                <!-- Project 1 -->
-                <div class="project-card">
-                    <span class="project-tag">#Virtualization #Security</span>
-                    <h3>Linux VM Expansion & Isolation</h3>
-                    <p>Hyper-V Sandbox Environment (2026)</p>
-                    <ul>
-                        <li>Live disk expansion via LVM volumes on Ubuntu.</li>
-                        <li>Implemented network-isolated sandbox via PowerShell NAT.</li>
-                        <li>Validated boundaries to prevent lateral movement.</li>
-                    </ul>
-                </div>
+    <div id="content">
+        <canvas id="bg-canvas"></canvas>
 
-                <!-- Project 2 -->
-                <div class="project-card">
-                    <span class="project-tag">#ZeroTrust #Access</span>
-                    <h3>Cloudflare Browser RDP</h3>
-                    <p>Secondary Access Deployment (2026)</p>
-                    <ul>
-                        <li>Implemented redundant RDP access paths via Zero Trust.</li>
-                        <li>Enforced identity-based access and least-privilege.</li>
-                    </ul>
-                </div>
+        <nav>
+            <a href="#home" class="nav-item">00_ROOT</a>
+            <a href="#certs" class="nav-item">01_QUALIFICATIONS</a>
+            <a href="#projects" class="nav-item">02_PROJECT_LOGS</a>
+            <a href="#experience" class="nav-item">03_HISTORY</a>
+            <a href="#contact" class="nav-item">04_EXIT</a>
+        </nav>
 
-                <!-- Project 3 -->
-                <div class="project-card">
-                    <span class="project-tag">#Infrastructure #Firewall</span>
-                    <h3>On-Prem & DR Topology Redesign</h3>
-                    <p>pfSense Hardware Upgrade (2025-2026)</p>
-                    <ul>
-                        <li>Led redesign of production and DR server network topology.</li>
-                        <li>Implemented segmented architecture for DB, Apps, and Admin.</li>
-                    </ul>
-                </div>
+        <main>
+            <!-- HEADER -->
+            <header id="home">
+                <span style="color: var(--accent); font-family: 'Fira Code';">[ DATA_ENCRYPTED: AUTHORIZED ]</span>
+                <h1 class="glitch-name">EUNICO TERRY<br>ESTANDARTE</h1>
+                <p style="font-family: 'Fira Code'; color: var(--terminal-green); font-size: 1.2rem; margin-top: 15px;">
+                    > Cybersecurity Analyst & System Administrator_
+                </p>
+                <p style="max-width: 700px; margin-top: 2rem; color: var(--text-dim); line-height: 1.7;">
+                    Specializing in Penetration Testing, GRC practices, and Infrastructure Security. 
+                    Proven expertise in managing mission-critical network environments and hardening digital perimeters.
+                </p>
+            </header>
 
-                <!-- Project 4 -->
-                <div class="project-card">
-                    <span class="project-tag">#VAPT #Pentesting</span>
-                    <h3>1 Pentagon Network VAPT</h3>
-                    <p>Internal Vulnerability Assessment (2025)</p>
-                    <ul>
-                        <li>Mapped network via Nmap, Nessus, and Metasploit.</li>
-                        <li>Produced risk ratings and step-by-step remediation plans.</li>
-                    </ul>
+            <!-- CERTIFICATIONS -->
+            <section id="certs">
+                <h2 class="section-title">CERTIFICATIONS</h2>
+                <div class="certs-grid">
+                    <div class="cert-card"><h4>CCNA</h4><span>Currently Enrolled (MNET Solutions)</span></div>
+                    <div class="cert-card"><h4>Practical OSINT Researcher Prof.</h4><span>In Progress (TCM-Security)</span></div>
+                    <div class="cert-card"><h4>Offensive Security w/ AI (OSAI)</h4><span>Red Team Leaders</span></div>
+                    <div class="cert-card"><h4>Practical Web Pentest Assoc. (PWPA)</h4><span>TCM-Security</span></div>
+                    <div class="cert-card"><h4>API Security Fundamentals</h4><span>APIsec University</span></div>
+                    <div class="cert-card"><h4>Certified GRC Analyst (CGRCA)</h4><span>Hack & Fix</span></div>
+                    <div class="cert-card"><h4>Phishing Prevention Specialist</h4><span>Hack & Fix</span></div>
+                    <div class="cert-card"><h4>SME Cyber Security Officer</h4><span>EU Academy</span></div>
+                    <div class="cert-card"><h4>Critical Infrastructure Protection</h4><span>OPSWAT Academy</span></div>
+                    <div class="cert-card"><h4>Ethical Hacking Boot Camp</h4><span>Zero to Mastery</span></div>
+                    <div class="cert-card"><h4>Intl Cyber Threat Task Force</h4><span>ICTTF</span></div>
+                    <div class="cert-card expired"><h4>CompTIA Security+</h4><span>Expired 2019</span></div>
                 </div>
+            </section>
 
-                <!-- Project 5 -->
-                <div class="project-card">
-                    <span class="project-tag">#WebSecurity #OWASP</span>
-                    <h3>1 Pentagon Web VAPT</h3>
-                    <p>Production Web App Pentesting (2025)</p>
-                    <ul>
-                        <li>Black-box assessment identifying OWASP Top 10.</li>
-                        <li>Detailed exploit evidence and CVE mapping.</li>
-                    </ul>
-                </div>
+            <!-- PROJECTS -->
+            <section id="projects">
+                <h2 class="section-title">PROJECT_LOGS</h2>
+                <div class="projects-grid">
+                    <!-- 2026 -->
+                    <div class="project-card">
+                        <span class="project-year">2026</span>
+                        <h3>Hyper-V Sandbox Isolation</h3>
+                        <p>Linux VM Storage Expansion & Network Isolation Environment.</p>
+                        <ul>
+                            <li>Live LVM volume expansion for zero downtime.</li>
+                            <li>PowerShell-based NAT & Internal vSwitches.</li>
+                            <li>Lateral movement prevention protocols.</li>
+                        </ul>
+                    </div>
+                    <div class="project-card">
+                        <span class="project-year">2026</span>
+                        <h3>Cloudflare Browser RDP</h3>
+                        <p>Zero Trust Secondary Access Deployment for Investagrams.</p>
+                        <ul>
+                            <li>Eliminated single points of failure in remote admin.</li>
+                            <li>Identity-based access & Least-privilege principles.</li>
+                        </ul>
+                    </div>
 
-                <!-- Project 6 -->
-                <div class="project-card">
-                    <span class="project-tag">#API #IIS</span>
-                    <h3>QNE API Server Deployment</h3>
-                    <p>Infrastructure & SSL Integration (2025)</p>
-                    <ul>
-                        <li>Configured NAT rules for secure external access.</li>
-                        <li>Binding SSL certificates in IIS for secure DB linkage.</li>
-                    </ul>
-                </div>
+                    <!-- 2025 -->
+                    <div class="project-card">
+                        <span class="project-year">2025 - 2026</span>
+                        <h3>Server Topology Redesign</h3>
+                        <p>pfSense Firewall Hardware Upgrade & On-Prem/DR Redesign.</p>
+                        <ul>
+                            <li>Segmented Production, DR, and Management networks.</li>
+                            <li>Improved throughput for increased server workloads.</li>
+                        </ul>
+                    </div>
+                    <div class="project-card">
+                        <span class="project-year">2025</span>
+                        <h3>Network VAPT (1 Pentagon)</h3>
+                        <p>Comprehensive Internal Vulnerability Assessment & Penetration Testing.</p>
+                        <ul>
+                            <li>Nmap, Nessus, and Metasploit enumeration.</li>
+                            <li>Risk ratings & step-by-step remediation guidance.</li>
+                        </ul>
+                    </div>
+                    <div class="project-card">
+                        <span class="project-year">2025</span>
+                        <h3>Web Application VAPT</h3>
+                        <p>Black-box & Authenticated testing on production applications.</p>
+                        <ul>
+                            <li>OWASP Top 10 vulnerability identification.</li>
+                            <li>Tailored remediation strategies for dev teams.</li>
+                        </ul>
+                    </div>
+                    <div class="project-card">
+                        <span class="project-year">2025</span>
+                        <h3>GRC & TPSA Initiative</h3>
+                        <p>Third-Party Security Assessment for major fintech partnerships.</p>
+                        <ul>
+                            <li>Aligned internal policies with data protection standards.</li>
+                            <li>Audit log & network diagram organization for compliance.</li>
+                        </ul>
+                    </div>
 
-                <!-- Project 7 -->
-                <div class="project-card">
-                    <span class="project-tag">#Monitoring #Linux</span>
-                    <h3>Linux Monitoring (Netdata)</h3>
-                    <p>Centralized Metrics (2023)</p>
-                    <ul>
-                        <li>Deployed monitoring for real-time visibility into CPU/IO.</li>
-                        <li>Tuned alert thresholds for diagnostic performance.</li>
-                    </ul>
+                    <!-- 2024 - 2022 -->
+                    <div class="project-card">
+                        <span class="project-year">2024</span>
+                        <h3>DR Site Security Deployment</h3>
+                        <p>Security Server Deployment at Vitro Paranaque Datacenter.</p>
+                    </div>
+                    <div class="project-card">
+                        <span class="project-year">2023</span>
+                        <h3>Linux Monitoring (Netdata)</h3>
+                        <p>Real-time visibility into CPU, Memory, Disk I/O, and Network metrics.</p>
+                        <ul>
+                            <li>Centralized tracking for multiple virtual machines.</li>
+                        </ul>
+                    </div>
+                    <div class="project-card">
+                        <span class="project-year">2022</span>
+                        <h3>Cloudflare Tunnel (RDP)</h3>
+                        <p>Secure RDP Access without public port exposure.</p>
+                        <ul>
+                            <li>Leveraged Zero Trust architecture for off-site admin.</li>
+                        </ul>
+                    </div>
                 </div>
+            </section>
 
-                <!-- Project 8 -->
-                <div class="project-card">
-                    <span class="project-tag">#SecurityTraining</span>
-                    <h3>Cyber Awareness Seminar</h3>
-                    <p>Company-wide Internal Training (2025)</p>
-                    <ul>
-                        <li>Led seminar on Online Scam Trends and Protection.</li>
-                        <li>Fostered security-first mindset across departments.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+            <!-- WORK HISTORY -->
+            <section id="experience">
+                <h2 class="section-title">WORK_HISTORY</h2>
+                <div class="timeline">
+                    <!-- Investagrams -->
+                    <div class="timeline-item">
+                        <span class="time-date">MAR 2022 — PRESENT</span>
+                        <h3 class="time-company">Investagrams Inc.</h3>
+                        <p class="time-role">System Administrator</p>
+                        <ul class="time-desc">
+                            <li>Monitors network, server, and endpoint health using Netdata and centralized logging.</li>
+                            <li>Performs regular vulnerability scanning and attack surface reduction.</li>
+                            <li>Manages pfSense firewalls, NAT policies, and secure Zero Trust tunnels.</li>
+                            <li>Assists in GRC policy drafting and TPSA compliance assessments.</li>
+                        </ul>
+                    </div>
 
-        <!-- EXPERIENCE -->
-        <section id="experience">
-            <h2 class="section-title">WORK_HISTORY</h2>
-            <div class="timeline">
-                
-                <div class="timeline-item">
-                    <span class="time-date">MARCH 2022 — PRESENT</span>
-                    <h3 class="time-company">Investagrams Inc., Makati City</h3>
-                    <p class="time-role">System Administrator (Full-time Hybrid)</p>
-                    <ul class="time-desc">
-                        <li>Monitors network, server, and endpoint health using Netdata and centralized logging.</li>
-                        <li>Conducts regular vulnerability scanning and exposure assessments.</li>
-                        <li>Maintains secure remote access tunnels and Zero Trust controls.</li>
-                        <li>Manages pfSense firewall rulesets, NAT policies, and security logs.</li>
-                        <li>Secondary: Assists in GRC policy drafting and TPSA compliance assessments.</li>
-                    </ul>
-                </div>
+                    <!-- NDA -->
+                    <div class="timeline-item">
+                        <span class="time-date">JUL 2025 — DEC 2025</span>
+                        <h3 class="time-company">Confidential / NDA</h3>
+                        <p class="time-role">OSINT Specialist</p>
+                        <ul class="time-desc">
+                            <li>Digital footprint analysis using ethical OSINT methods.</li>
+                            <li>Correlate online intel with internal borrower records to validate data and flag potential fraud indicators</li>
+							<li>Create actionable reports with risk profiling and trace summaries to support collections.</li>
+                        </ul>
+                    </div>
 
-                <div class="timeline-item">
-                    <span class="time-date">JULY 2025 — DEC 2025</span>
-                    <h3 class="time-company">NDA / Confidential</h3>
-                    <p class="time-role">OSINT Specialist (Part-time Hybrid)</p>
-                    <ul class="time-desc">
-                        <li>Performed digital footprint analysis using ethical OSINT methods.</li>
-                        <li>Correlated online intel with internal records to flag fraud indicators.</li>
-                        <li>Produced risk profiling reports to support collections.</li>
-                    </ul>
-                </div>
+                    <!-- 1 Pentagon -->
+                    <div class="timeline-item">
+                        <span class="time-date">FEB 2024 — JUL 2025</span>
+                        <h3 class="time-company">1-Pentagon Credit & Lending Corp.</h3>
+                        <p class="time-role">Cybersecurity Analyst</p>
+                        <ul class="time-desc">
+                            <li>Led Network and Web Application VAPT projects.</li>
+                            <li>Enforced GRC policies and hardened organization infrastructure.</li>
+							<li>Manages and maintains the organization's network infrastructure to ensure high availability.</li>
+                        </ul>
+                    </div>
 
-                <div class="timeline-item">
-                    <span class="time-date">FEB 2024 — JULY 2025</span>
-                    <h3 class="time-company">1-Pentagon Credit & Lending Corp.</h3>
-                    <p class="time-role">Cybersecurity Analyst (Part-time Hybrid)</p>
-                    <ul class="time-desc">
-                        <li>Performed in-depth Network and Web Application VAPT.</li>
-                        <li>Maintained high availability and security across organization infrastructure.</li>
-                        <li>Recommended remediation strategies for misconfigurations and outdated services.</li>
-                    </ul>
-                </div>
+                    <!-- ASLCU -->
+                    <div class="timeline-item">
+                        <span class="time-date">JAN 2017 — FEB 2022</span>
+                        <h3 class="time-company">ASLCU POS Equipment</h3>
+                        <p class="time-role">Network Engineer</p>
+                        <ul class="time-desc">
+                            <li>Managed mall-based POS network infrastructure.</li>
+                            <li>Preventive maintenance and troubleshooting for POS terminals.</li>
+							<li>Coordinated with mall IT personel and vendors to support network hook-ups.</li>
+                        </ul>
+                    </div>
 
-                <div class="timeline-item">
-                    <span class="time-date">JAN 2017 — FEB 2022</span>
-                    <h3 class="time-company">ASLCU POS Equipment</h3>
-                    <p class="time-role">Network Engineer (Part-time Hybrid)</p>
-                    <ul class="time-desc">
-                        <li>Managed POS network infrastructure for mall-based sales setups.</li>
-                        <li>Troubleshot networking issues and performed preventive maintenance.</li>
-                    </ul>
-                </div>
+                    <!-- Specified Contractors -->
+                    <div class="timeline-item">
+                        <span class="time-date">FEB 2019 — NOV 2019</span>
+                        <h3 class="time-company">Specified Contractors & Dev. Inc.</h3>
+                        <p class="time-role">IT Officer</p>
+						 <ul class="time-desc">
+                            <li>Handled end-to-end IT operations including network setup.</li>
+                            <li>Managed and maintain CCTV systems</li>
+							<li>Acted as generalist IT officer responsible for hardware & software maintenance.</li>
+                        </ul>
+                    </div>
 
-                <div class="timeline-item">
-                    <span class="time-date">FEB 2019 — NOV 2019</span>
-                    <h3 class="time-company">Specified Contractors & Development Inc.</h3>
-                    <p class="time-role">IT Officer (Full-time)</p>
-                    <ul class="time-desc">
-                        <li>Handled end-to-end IT operations: Hardware, Software, and Network setup.</li>
-                        <li>Maintained CCTV systems and basic security controls.</li>
-                    </ul>
-                </div>
+                    <!-- Happy Lemon -->
+                    <div class="timeline-item">
+                        <span class="time-date">AUG 2017 — AUG 2018</span>
+                        <h3 class="time-company">Happy Lemon Group Philippines</h3>
+                        <p class="time-role">IT Officer</p>
+						<ul class="time-desc">
+                            <li>Provided comprehensive IT support including CCTV management.</li>
+                            <li>Handled Netowork cabling and troubleshooting.</li>
+							<li>Acted as go-to tech support for all department and all stores, for various IT-related issues.</li>
+                        </ul>
+                    </div>
 
-                <div class="timeline-item">
-                    <span class="time-date">AUG 2017 — AUG 2018</span>
-                    <h3 class="time-company">Happy Lemon Group Philippines</h3>
-                    <p class="time-role">IT Officer (Full-time)</p>
-                    <ul class="time-desc">
-                        <li>Supported POS software, biometric systems, and CCTV.</li>
-                        <li>Managed store-wide network cabling and hardware maintenance.</li>
-                    </ul>
-                </div>
+                    <!-- Unilab -->
+                    <div class="timeline-item">
+                        <span class="time-date">NOV 2015 — MAY 2016</span>
+                        <h3 class="time-company">United Laboratories (Unilab)</h3>
+                        <p class="time-role">Web Project Coordinator / QA</p>
+						<ul class="time-desc">
+                            <li>Validated application updates against requriements and reported bugs.</li>
+                            <li>Provided technical support to doctors experiencing issues.</li>
+							<li>Managed user access by creating, maintaining, and troubleshooting doctor accounts.</li>
+                        </ul>
+                    </div>
 
-                <div class="timeline-item">
-                    <span class="time-date">NOV 2015 — MAY 2016</span>
-                    <h3 class="time-company">United Laboratories (Unilab)</h3>
-                    <p class="time-role">Web Project Coordinator / QA (Contract)</p>
-                    <ul class="time-desc">
-                        <li>Validated application updates and reported usability bugs.</li>
-                        <li>Managed doctor account access and platform troubleshooting.</li>
-                    </ul>
+                    <!-- Camp Crame -->
+                    <div class="timeline-item">
+                        <span class="time-date">NOV 2014 — APR 2015</span>
+                        <h3 class="time-company">Camp Crame, Quezon City</h3>
+                        <p class="time-role">IT Intern</p>
+						<ul class="time-desc">
+                            <li>Assisted in network infrastructure support, including structured cabling, basic network setup.</li>
+                            <li>Performed laptop & desktop formatting, software installation, and basic system configuration.</li>
+							<li>Provided day-to-day technical suport for common IT issues encountered by staff.</li>
+                        </ul>
+                    </div>
                 </div>
+            </section>
 
-                <div class="timeline-item">
-                    <span class="time-date">NOV 2014 — APRIL 2015</span>
-                    <h3 class="time-company">Camp Crame, Quezon City</h3>
-                    <p class="time-role">IT Intern</p>
-                    <ul class="time-desc">
-                        <li>Assisted in structured cabling and basic network troubleshooting.</li>
-                        <li>Formatted hardware and provided day-to-day staff support.</li>
-                    </ul>
+            <!-- FOOTER -->
+            <footer id="contact">
+                <h2 class="section-title">TERMINAL_EXIT</h2>
+                <div style="margin: 2rem 0;">
+                    <a href="mailto:eunico.estandarte@gmail.com" class="contact-link">EMAIL</a>
+                    <a href="https://www.linkedin.com/in/eunico-e-00b354100/" target="_blank" class="contact-link">LINKEDIN</a>
+                    <span class="contact-link">Viber: 09266331931</span>
                 </div>
-
-            </div>
-        </section>
-
-        <!-- CONTACT -->
-        <footer id="contact">
-            <h2 class="section-title">TERMINAL_EXIT</h2>
-            <div class="contact-grid">
-                <div>
-                    <p>EMAIL</p>
-                    <a href="mailto:eunico.estandarte@gmail.com" class="contact-link">eunico.estandarte@gmail.com</a>
-                </div>
-                <div>
-                    <p>PHONE/VIBER</p>
-                    <span class="contact-link">09266331931</span>
-                </div>
-                <div>
-                    <p>LOCATION</p>
-                    <span class="contact-link">Antipolo City, PH</span>
-                </div>
-            </div>
-            <div style="margin-top: 4rem; opacity: 0.5;">
-                <p>Linkedin Profile: https://www.linkedin.com/in/eunico-e-00b354100/</p>
-                <p>Built with Cyber-Minimalist Protocol v2.0</p>
-            </div>
-        </footer>
-    </main>
+                <p style="opacity: 0.4; font-family: 'Fira Code'; margin-top: 3rem;">
+                    DESIGNED_BY: SYSTEM_CORE // BUILT_WITH: CYBER_TECH_V3.0
+                </p>
+            </footer>
+        </main>
+    </div>
 
     <script>
-        // Password Protection Function
-        function checkPassword() {
-            var password = prompt("ENTER ACCESS KEY:");
-            if (btoa(password) !== "VW5pdDE4NzBFdW5peCFARGV0YWlscw==") { 
-                alert("ACCESS DENIED.");
-                document.body.innerHTML = '<div style="background:#060608; color:red; height:100vh; display:flex; align-items:center; justify-content:center; font-family:monospace; font-size: 2rem;">403 - UNAUTHORIZED ACCESS</div>';
-                document.body.style.display = "block";
-            } else {
-                document.body.style.display = "flex";
-                animate(); // Start animation only after access
-            }
-        }
+        // Password Protection
+        const passInput = document.getElementById('password-input');
+        const loginOverlay = document.getElementById('login-overlay');
+        const content = document.getElementById('content');
+        const status = document.getElementById('login-status');
 
-        // --- Network Background Animation ---
+        passInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                const val = passInput.value;
+                if (btoa(val) === "VW5pdDE4NzBFdW5peCFARGV0YWlscw==") {
+                    status.style.color = "var(--terminal-green)";
+                    status.innerText = "ACCESS GRANTED. DECRYPTING PORTFOLIO...";
+                    setTimeout(() => {
+                        loginOverlay.style.opacity = '0';
+                        setTimeout(() => {
+                            loginOverlay.style.display = 'none';
+                            content.style.display = 'block';
+                            initCanvas();
+                        }, 500);
+                    }, 1000);
+                } else {
+                    status.style.color = "#ff4444";
+                    status.innerText = "UNAUTHORIZED_KEY. ACCESS DENIED.";
+                    passInput.value = "";
+                }
+            }
+        });
+
+        // Neural Network Background (Mouse Reactive)
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
+        let mouse = { x: null, y: null };
+
+        function initCanvas() {
+            window.addEventListener('resize', resize);
+            window.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; });
+            resize(); createParticles(); animate();
+        }
 
         function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         }
 
-        window.addEventListener('resize', resize);
-        resize();
-
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.4;
-                this.vy = (Math.random() - 0.5) * 0.4;
+                this.size = 1.5;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
             }
             update() {
-                this.x += this.vx; this.y += this.vy;
-                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                this.x += this.speedX; this.y += this.speedY;
+                if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+                if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let dist = Math.sqrt(dx*dx + dy*dy);
+                if(dist < 150) { this.x -= dx/100; this.y -= dy/100; }
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(0, 242, 255, 0.7)';
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
             }
         }
 
-        for(let i=0; i<100; i++) particles.push(new Particle());
+        function createParticles() {
+            particles = [];
+            let count = (canvas.width * canvas.height) / 8000;
+            for (let i = 0; i < count; i++) particles.push(new Particle());
+        }
 
         function animate() {
-            ctx.clearRect(0,0,canvas.width, canvas.height);
-            ctx.fillStyle = "#00f2ff";
-            ctx.strokeStyle = "rgba(0, 242, 255, 0.2)"; // Mas matingkad na stroke (0.2)
-            
-            particles.forEach((p, i) => {
-                p.update();
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, 1.5, 0, Math.PI*2); // Malaki ng konti ang dots (1.5)
-                ctx.fill();
-
-                for(let j=i+1; j<particles.length; j++) {
-                    let p2 = particles[j];
-                    let d = Math.hypot(p.x-p2.x, p.y-p2.y);
-                    if(d < 150) { // Mas mahabang lines para mas visible
-                        ctx.beginPath();
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(p.x, p.y);
-                        ctx.lineTo(p2.x, p2.y);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, index) => {
+                p.update(); p.draw();
+                for (let j = index; j < particles.length; j++) {
+                    const dx = p.x - particles[j].x;
+                    const dy = p.y - particles[j].y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist < 150) {
+                        ctx.strokeStyle = `rgba(0, 242, 255, ${0.15 - dist/1000})`;
+                        ctx.lineWidth = 0.5; ctx.beginPath();
+                        ctx.moveTo(p.x, p.y); ctx.lineTo(particles[j].x, particles[j].y);
                         ctx.stroke();
                     }
                 }
